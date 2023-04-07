@@ -3,6 +3,10 @@ import {
   getCityFromStorage,
   getTokenFromStorage,
 } from './storage.service.js';
+import {
+  validateCityInput,
+  validateTokenInput,
+} from './validator.service.js';
 
 const API_URL = 'https://api.openweathermap.org/data/2.5/';
 const API_TIMEOUT = 5000;
@@ -14,10 +18,15 @@ const axiosInstance = axios.create({
   timeout: API_TIMEOUT,
 });
 
-const adaptCurrentWeatherParamsToServer = ({city, token}) => ({
-  q: city,
-  appid: token,
-});
+const adaptCurrentWeatherParamsToServer = ({city, token}) => {
+  validateTokenInput(token);
+  validateCityInput(city);
+
+  return ({
+    q: city,
+    appid: token,
+  });
+};
 
 const adaptCurrentWeatherDataToClient = (serverCurrentWeatherData) => ({
   name: serverCurrentWeatherData.name,

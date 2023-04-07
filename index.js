@@ -95,10 +95,10 @@ const main = async () => {
   await handleDefault();
 };
 
-(async () => {
+setTimeout(async () => {
   try {
     await main();
   } catch (e) {
     printError(e?.message || 'Unknown error');
   }
-})();
+});

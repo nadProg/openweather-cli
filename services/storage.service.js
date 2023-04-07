@@ -23,21 +23,26 @@ const setStorage = async (storage) => {
   await fs.promises.writeFile(weatherDateFilePath, JSON.stringify(storage));
 };
 
-const initStorageService = async () => {
+
+const ensureStorage = async () => {
   try {
-    await getStorage();
+    await fs.promises.access(weatherDateFilePath);
   } catch (e) {
     await setStorage(INITIAL_STORAGE);
   }
-};
+}
 
 const setValueInStorage = async (key, value) => {
+  await ensureStorage();
+
   const storage = await getStorage();
   storage[key] = value;
   await setStorage(storage);
 };
 
 const getValueFromStorage = async (key) => {
+  await ensureStorage();
+
   const storage = await getStorage();
   return storage[key];
 };
@@ -49,8 +54,6 @@ const getTokenFromStorage = () => getValueFromStorage(StorageKey.TOKEN);
 const setCityToStorage = (city) => setValueInStorage(StorageKey.CITY, city);
 
 const setTokenToStorage = (token) => setValueInStorage(StorageKey.TOKEN, token);
-
-setTimeout(initStorageService);
 
 export {
   setCityToStorage,
