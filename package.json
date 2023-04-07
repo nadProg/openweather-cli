@@ -1,9 +1,12 @@
 {
   "name": "free-weather-cli",
-  "type": "module",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "weather": "index.js"
+  },
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
