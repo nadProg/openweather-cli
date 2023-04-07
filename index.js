@@ -1,9 +1,19 @@
 #!/usr/bin/env node
 
+import stripIndent from 'strip-indent';
+import chalk from "chalk";
 import {getArgValue} from "./helpers/getArgValue.js";
 
 const handleHelp = () => {
-  console.info('Help handler');
+  console.info(chalk.whiteBright(stripIndent(`
+  Help info
+  
+  Command description:  
+    default . . . . . . . . . . . show the weather
+    --city, -c [CITY] . . . . . . set city [CITY]
+    --token, -t [API_TOKEN] . . . set API token [API_TOKEN]
+    --help, -h  . . . . . . . . . show help info 
+  `)));
 };
 
 const handleCity = () => {
@@ -26,8 +36,8 @@ const handleDefault = () => {
     return;
   }
 
-  console.info(`Unknown command: ${command}`);
-  console.info('Please read the following help info.');
+  console.info(chalk.redBright('Unknown command: ') + chalk.bgRedBright.whiteBright(command));
+  console.info('Please read the following help info:');
 
   handleHelp();
 };
