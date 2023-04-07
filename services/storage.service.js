@@ -42,10 +42,19 @@ const getValueFromStorage = async (key) => {
   return storage[key];
 };
 
+const getCityFromStorage = () => getValueFromStorage(StorageKey.CITY);
+
+const getTokenFromStorage = () => getValueFromStorage(StorageKey.TOKEN);
+
+const setCityToStorage = (city) => setValueInStorage(StorageKey.CITY, city);
+
+const setTokenToStorage = (token) => setValueInStorage(StorageKey.TOKEN, token);
+
 setTimeout(initStorageService);
 
 export {
-  StorageKey,
-  setValueInStorage,
-  getValueFromStorage,
+  setCityToStorage,
+  setTokenToStorage,
+  getCityFromStorage,
+  getTokenFromStorage,
 };

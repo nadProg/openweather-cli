@@ -1,15 +1,15 @@
 import chalk from 'chalk';
 import stripIndent from 'strip-indent';
 
-export const printError = (text) => {
+export const printError = (text = '') => {
   console.error(`${chalk.bgRedBright.whiteBright('ERROR:')} ${chalk.redBright(text)}`);
 };
 
-export const printSuccess = (text) => {
+export const printSuccess = (text = '') => {
   console.info(`${chalk.bgGreenBright.whiteBright('SUCCESS:')} ${chalk.greenBright(text)}`);
 };
 
-export const printInfo = (text) => {
+export const printInfo = (text = '') => {
   console.info(`${chalk.bgCyanBright.whiteBright('INFO:')} ${chalk.cyanBright(text)}`);
 };
 
