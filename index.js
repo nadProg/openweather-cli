@@ -1,54 +1,59 @@
 #!/usr/bin/env node
 
-import stripIndent from 'strip-indent';
-import chalk from "chalk";
-import {getArgValue} from "./helpers/getArgValue.js";
+import {
+  getCommand,
+  getArgValue,
+} from './helpers/index.js';
+import {
+  printError,
+  printHelp,
+  printInfo,
+  printSuccess,
+  printUnknownCommand,
+} from './services/printer.service.js';
+import {setValueInStorage, StorageKey} from './services/storage.service.js';
+import {validateInputToken} from './services/validator.service.js';
 
 const handleHelp = () => {
-  console.info(chalk.whiteBright(stripIndent(`
-  Help info
-  
-  Command description:  
-    default . . . . . . . . . . . show the weather
-    --city, -c [CITY] . . . . . . set city [CITY]
-    --token, -t [API_TOKEN] . . . set API token [API_TOKEN]
-    --help, -h  . . . . . . . . . show help info 
-  `)));
+  printHelp();
 };
 
 const handleCity = () => {
   console.info('City handler');
 };
 
-const handleToken = () => {
-  console.info('Token handler');
+const handleToken = async (token) => {
+  validateInputToken(token);
+
+  printInfo('Saving token...');
+  await setValueInStorage(StorageKey.TOKEN, token);
+  printSuccess('Token saved');
 };
 
 const handleMain = () => {
-  console.info('Main handler');
-}
+  printInfo('Main handler');
+  printSuccess('Main handler');
+  printError('Main handler');
+};
 
 const handleDefault = () => {
-  const command = process.argv.slice(2).map(v => v.trim()).filter(Boolean).join(' ');
+  const command = getCommand();
 
   if (!command) {
     handleMain();
     return;
   }
 
-  console.info(chalk.redBright('Unknown command: ') + chalk.bgRedBright.whiteBright(command));
-  console.info('Please read the following help info:');
-
-  handleHelp();
+  printUnknownCommand(command);
 };
 
 const argHandlers = {
   city: handleCity,
   token: handleToken,
   help: handleHelp,
-}
+};
 
-const init = () => {
+const main = async () => {
   for (const [command, handler] of Object.entries(argHandlers)) {
     const argValue = getArgValue(command);
 
@@ -56,12 +61,17 @@ const init = () => {
       continue;
     }
 
-    handler(argValue);
+    await handler(argValue);
     return;
   }
 
-  handleDefault();
+  await handleDefault();
 };
 
-
-init();
+(async () => {
+  try {
+    await main();
+  } catch (e) {
+    printError(e?.message || 'Unknown error');
+  }
+})();

@@ -1,0 +1,1 @@
+export const getCommand = () => process.argv.slice(2).map(v => v.trim()).filter(Boolean).join(' ');
