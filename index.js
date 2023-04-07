@@ -11,19 +11,29 @@ import {
   printSuccess,
   printUnknownCommand,
 } from './services/printer.service.js';
-import {setValueInStorage, StorageKey} from './services/storage.service.js';
-import {validateInputToken} from './services/validator.service.js';
+import {
+  StorageKey,
+  setValueInStorage,
+} from './services/storage.service.js';
+import {
+  validateCityInput,
+  validateTokenInput,
+} from './services/validator.service.js';
 
 const handleHelp = () => {
   printHelp();
 };
 
-const handleCity = () => {
-  console.info('City handler');
+const handleCity = async (city) => {
+  validateCityInput(city);
+
+  printInfo('Saving city...');
+  await setValueInStorage(StorageKey.CITY, city.toLowerCase());
+  printSuccess('City saved');
 };
 
 const handleToken = async (token) => {
-  validateInputToken(token);
+  validateTokenInput(token);
 
   printInfo('Saving token...');
   await setValueInStorage(StorageKey.TOKEN, token);
